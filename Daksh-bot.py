@@ -15,7 +15,7 @@ def chat_with_dakshbot():
         user_input = input("You: ")
 
         if user_input.lower() in ["exit", "quit", "bye"]:
-            print("DakshBot: Goodbye! 👋")
+            print("DakshBot: bye")
             break
 
         messages.append({"role": "user", "content": user_input})
