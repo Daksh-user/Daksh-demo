@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Netflix Insight Hub (Unofficial) – Single‑File</title>
+<meta name="description" content="Playful, animated, single‑file webpage to explore how good the Netflix app is: features, recommendations, awards, leadership, and quick links." />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b10; --card:#12121a; --muted:#a1a1b3; --text:#f4f4f7; --accent:#e50914; --accent2:#ff4d5a; --border:#23232f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  a{color:inherit}
+  .container{max-width:1100px;margin:0 auto;padding:24px}
+  header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(8px);background:linear-gradient(180deg,rgba(10,10,15,.85),rgba(10,10,15,.55));border-bottom:1px solid var(--border);z-index:20}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:conic-gradient(from 210deg,var(--accent),var(--accent2));box-shadow:0 10px 30px rgba(229,9,20,.35)}
+  .h1{font-weight:800;letter-spacing:-.02em}
+  .pill{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:#161621;padding:10px 12px;border-radius:12px}
+  .btn{border:1px solid var(--border);background:#1a1a26;padding:10px 14px;border-radius:12px;cursor:pointer}
+  .btn:hover{background:#242436}
+  .grid{display:grid;gap:20px}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;position:relative;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+  .card::before{content:"";position:absolute;inset:-40% -40% auto auto;width:60%;height:60%;background:radial-gradient(600px 300px at right top,rgba(229,9,20,.08),transparent 60%);pointer-events:none}
+  .muted{color:var(--muted)}
+  .hero{padding:40px 0}
+  .hero h2{font-size:clamp(28px,5vw,44px);margin:0 0 12px;font-weight:800}
+  .gradient{background-image:linear-gradient(90deg,#ff6b73,#e50914,#ff6b73);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .cta .primary{background:var(--accent);border-color:#bb0710}
+  .cta .primary:hover{filter:brightness(1.1)}
+  .glass{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.00));border:1px solid var(--border)}
+  .kpi{display:flex;gap:14px;align-items:center}
+  .kpi .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .slider-row{display:grid;grid-template-columns:1.4fr .8fr auto;gap:10px;align-items:center}
+  input[type=range]{width:100%}
+  .bar{height:12px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 6px 16px rgba(229,9,20,.35)}
+  .bars{display:grid;gap:10px;margin-top:10px}
+  .feature{padding:14px;border:1px solid var(--border);background:#181824;border-radius:14px}
+  .links a{display:flex;gap:10px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#171722;text-decoration:none}
+  .links a:hover{border-color:#ff6b73;box-shadow:0 8px 24px rgba(229,9,20,.18)}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+  footer{border-top:1px solid var(--border);margin-top:30px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:#151520}
+  .toggle{display:inline-flex;align-items:center;gap:8px}
+  .switch{position:relative;width:46px;height:24px;background:#2a2a3a;border-radius:999px;border:1px solid var(--border);cursor:pointer}
+  .knob{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .25s ease}
+  .switch.on .knob{transform:translateX(22px)}
+  .bgfx::before, .bgfx::after{content:"";position:fixed;border-radius:50%;filter:blur(80px);opacity:.25;z-index:-1}
+  .bgfx::before{width:420px;height:420px;background:#e50914;left:-120px;top:-120px}
+  .bgfx::after{width:560px;height:560px;background:#ff6b73;right:-160px;bottom:-160px}
+  /* light theme */
+  .light{--bg:#f6f7fb;--card:#ffffff;--text:#111217;--muted:#5b5e6a;--border:#e6e7ee}
+  .light header{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.55))}
+  .light .logo{box-shadow:0 10px 30px rgba(229,9,20,.25)}
+</style>
+</head>
+<body class="bgfx">
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px">
+      <div class="brand">
+        <div class="logo">🎬</div>
+        <div>
+          <div class="muted" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase">Unofficial</div>
+          <div class="h1">Netflix Insight Hub</div>
+        </div>
+      </div>
+      <div class="pill">
+        <span class="muted" style="font-size:14px">Theme</span>
+        <div class="switch" id="themeSwitch" role="switch" aria-checked="false"><div class="knob"></div></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container grid grid-2" style="align-items:center">
+      <div>
+        <h2>How good is the <span class="gradient">Netflix app</span> for you?</h2>
+        <p class="muted">Explore features, tune your scores, see awards snapshots, check leadership, and jump to the most‑visited official Netflix pages — all in one colorful, animated page.</p>
+        <div class="cta">
+          <a class="btn primary" href="#rate">Rate & Compare</a>
+          <a class="btn" href="#links">Quick Links</a>
+        </div>
+        <div class="chips" style="margin-top:14px">
+          <div class="chip">Animated UI</div>
+          <div class="chip">No frameworks</div>
+          <div class="chip">Single file</div>
+        </div>
+      </div>
+      <div class="card glass">
+        <div class="kpi">
+          <div class="dot"></div>
+          <div>
+            <div style="font-weight:800">Experience Radar (mini)</div>
+            <div class="muted" style="font-size:13px">Move the sliders to update bars in real‑time.</div>
+          </div>
+        </div>
+        <div class="bars" id="bars" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="rate" class="container grid grid-2">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Tune Your Scores</h3>
+        <p class="muted" style="margin-top:0">Drag sliders (0–10). This helps you decide how good Netflix feels for your needs.</p>
+        <div class="grid" style="gap:12px;margin-top:12px">
+          <div class="slider-row"><label class="muted">App Quality (UI/UX, stability)</label><input type="range" min="0" max="10" step="1" value="8" data-key="App Quality"><div id="val0" style="width:2ch;text-align:right">8</div></div>
+          <div class="slider-row"><label class="muted">Recommendations</label><input type="range" min="0" max="10" step="1" value="7" data-key="Recommendations"><div id="val1" style="width:2ch;text-align:right">7</div></div>
+          <div class="slider-row"><label class="muted">Catalog Depth & Variety</label><input type="range" min="0" max="10" step="1" value="9" data-key="Catalog"><div id="val2" style="width:2ch;text-align:right">9</div></div>
+          <div class="slider-row"><label class="muted">Offline Downloads</label><input type="range" min="0" max="10" step="1" value="8" data-key="Downloads"><div id="val3" style="width:2ch;text-align:right">8</div></div>
+          <div class="slider-row"><label class="muted">Value for Price</label><input type="range" min="0" max="10" step="1" value="6" data-key="Value"><div id="val4" style="width:2ch;text-align:right">6</div></div>
+        </div>
+        <div class="bars" id="bars2" style="margin-top:16px"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px">Quick Verdict Helper</h3>
+        <ul class="muted" style="margin:0;padding-left:18px;line-height:1.7">
+          <li><b>Great for</b> binge‑worthy originals, slick apps on most devices, and strong kids profiles.</li>
+          <li><b>Recommendations</b> improve as you rate/watch — try thumbs up/down and separate profiles.</li>
+          <li><b>Downloads</b> are handy for travel; availability varies by title/plan.</li>
+          <li><b>Value</b> depends on plan, region, and if you need 4K/HDR & concurrent streams.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Features & Functions</h3>
+        <div class="grid grid-3" style="margin-top:10px">
+          <div class="feature"><b>Personalized Rows</b><div class="muted">Homepage like “Because you watched …” tuned to your viewing.</div></div>
+          <div class="feature"><b>Profiles & Maturity</b><div class="muted">Multiple profiles, PIN locks, Kids experience.</div></div>
+          <div class="feature"><b>Playback Quality</b><div class="muted">Up to 4K HDR & Dolby Atmos on supported devices/plans.</div></div>
+          <div class="feature"><b>Downloads</b><div class="muted">Offline viewing on phones/tablets for supported titles.</div></div>
+          <div class="feature"><b>Subtitles & Dubs</b><div class="muted">Extensive languages & accessibility options.</div></div>
+          <div class="feature"><b>Search & Top 10</b><div class="muted">Trending charts and editorial rails ease discovery.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container grid grid-2">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Awards (Snapshot)</h3>
+        <p class="muted" style="margin-top:0">Illustrative sample — update with current stats for your region.</p>
+        <table>
+          <thead><tr><th>Year</th><th>Wins</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>2021</td><td>7</td><td>Primetime Emmys (selected)</td></tr>
+            <tr><td>2022</td><td>3</td><td>Academy Awards (selected)</td></tr>
+            <tr><td>2023</td><td>6</td><td>Golden Globes (selected)</td></tr>
+            <tr><td>2024</td><td>5</td><td>BAFTAs (selected)</td></tr>
+          </tbody>
+        </table>
+        <div class="muted" style="font-size:12px;margin-top:8px">Tip: replace this table with your own research or an API later.</div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px">Leadership (CEOs)</h3>
+        <ul class="muted" style="line-height:1.8;margin:0">
+          <li><b>Ted Sarandos</b> — Co‑CEO (since 2020)</li>
+          <li><b>Greg Peters</b> — Co‑CEO (since 2023)</li>
+          <li><b>Reed Hastings</b> — Co‑Founder / Executive Chairman (since 1997)</li>
+        </ul>
+        <div class="muted" style="font-size:12px;margin-top:8px">Note: Unofficial page — verify leadership details from Investor Relations.</div>
+      </div>
+    </section>
+
+    <section id="links" class="container">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Most‑Visited Netflix Destinations</h3>
+        <p class="muted" style="margin-top:0">Jump to official pages.</p>
+        <div class="grid grid-3 links">
+          <a href="https://www.netflix.com/" target="_blank" rel="noreferrer">🏠 <div><b>Netflix Home</b><div class="muted">www.netflix.com</div></div></a>
+          <a href="https://top10.netflix.com/" target="_blank" rel="noreferrer">📈 <div><b>Top 10 on Netflix</b><div class="muted">top10.netflix.com</div></div></a>
+          <a href="https://help.netflix.com/" target="_blank" rel="noreferrer">❓ <div><b>Help Center</b><div class="muted">help.netflix.com</div></div></a>
+          <a href="https://media.netflix.com/" target="_blank" rel="noreferrer">📰 <div><b>Media Center</b><div class="muted">media.netflix.com</div></div></a>
+          <a href="https://jobs.netflix.com/" target="_blank" rel="noreferrer">💼 <div><b>Careers</b><div class="muted">jobs.netflix.com</div></div></a>
+          <a href="https://ir.netflix.net/" target="_blank" rel="noreferrer">💹 <div><b>Investor Relations</b><div class="muted">ir.netflix.net</div></div></a>
+          <a href="https://about.netflix.com/" target="_blank" rel="noreferrer">ℹ️ <div><b>About Netflix</b><div class="muted">about.netflix.com</div></div></a>
+          <a href="https://www.netflix.com/signup" target="_blank" rel="noreferrer">📝 <div><b>Plans & Sign Up</b><div class="muted">netflix.com/signup</div></div></a>
+          <a href="https://www.netflix.com/browse" target="_blank" rel="noreferrer">🎞️ <div><b>Browse Catalog</b><div class="muted">netflix.com/browse</div></div></a>
+          <a href="https://www.netflix.com/tudum" target="_blank" rel="noreferrer">🗞️ <div><b>Tudum (News)</b><div class="muted">netflix.com/tudum</div></div></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 24px">
+      <div class="muted">Built with ❤️ for demo/learning. Not affiliated with Netflix.</div>
+      <div class="muted" style="display:flex;gap:16px"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+    </div>
+  </footer>
+
+<script>
+  // Theme toggle
+  const switchEl = document.getElementById('themeSwitch');
+  const applyTheme = (mode) => {
+    document.body.classList.toggle('light', mode === 'light');
+    switchEl.classList.toggle('on', mode === 'light');
+    switchEl.setAttribute('aria-checked', mode === 'light');
+    localStorage.setItem('nf_theme', mode);
+  };
+  const saved = localStorage.getItem('nf_theme');
+  applyTheme(saved || 'dark');
+  switchEl.addEventListener('click', () => {
+    const next = document.body.classList.contains('light') ? 'dark' : 'light';
+    applyTheme(next);
+  });
+
+  // Simple bar visualizer (no libraries)
+  const metrics = [
+    { key: 'App Quality', value: 8 },
+    { key: 'Recommendations', value: 7 },
+    { key: 'Catalog', value: 9 },
+    { key: 'Downloads', value: 8 },
+    { key: 'Value', value: 6 },
+  ];
+
+  function renderBars(targetId, data){
+    const wrap = document.getElementById(targetId);
+    wrap.innerHTML = '';
+    data.forEach(m => {
+      const row = document.createElement('div');
+      row.style.display='grid';
+      row.style.gridTemplateColumns='140px 1fr auto';
+      row.style.gap='10px';
+      row.style.alignItems='center';
+
+      const label = document.createElement('div');
+      label.className='muted';
+      label.textContent = m.key;
+
+      const track = document.createElement('div');
+      track.style.width='100%';
+      track.style.height='12px';
+      track.style.background='#0f0f16';
+      track.style.border='1px solid var(--border)';
+      track.style.borderRadius='8px';
+      track.style.overflow='hidden';
+
+      const fill = document.createElement('div');
+      fill.className='bar';
+      fill.style.width = Math.max(0, Math.min(10, m.value)) * 10 + '%';
+      fill.style.transition='width .35s ease';
+      track.appendChild(fill);
+
+      const val = document.createElement('div');
+      val.style.width='2ch';
+      val.style.textAlign='right';
+      val.textContent = m.value;
+
+      row.appendChild(label); row.appendChild(track); row.appendChild(val);
+      wrap.appendChild(row);
+    });
+  }
+
+  renderBars('bars', metrics);
+  renderBars('bars2', metrics);
+
+  // Bind sliders to bars
+  const sliders = document.querySelectorAll('input[type=range][data-key]');
+  sliders.forEach((sl, idx) => {
+    sl.addEventListener('input', (e) => {
+      metrics[idx].value = Number(e.target.value);
+      document.getElementById('val'+idx).textContent = metrics[idx].value;
+      renderBars('bars', metrics);
+      renderBars('bars2', metrics);
+    });
+  });
+</script>
+</body>
+</html>
